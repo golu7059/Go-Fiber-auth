@@ -2,14 +2,15 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"os"
-	"log"
-	"github.com/joho/godotenv"
 )
 
 // User struct represents the user model for the database
@@ -28,7 +29,12 @@ func init() {
 		log.Println("No .env file found")
 	}
 
-	// Connect to the database
+	// Initialize the database
+	initDatabase()
+}
+
+// initDatabase initializes the database connection and migrates the schema
+func initDatabase() {
 	var err error
 	dsn := os.Getenv("DATABASE_DSN")
 	if dsn == "" {
@@ -141,4 +147,3 @@ func loginUser(c *fiber.Ctx) error {
 		// In a real-world application, you would return a JWT or session token here
 	})
 }
-
